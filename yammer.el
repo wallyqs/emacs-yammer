@@ -52,9 +52,10 @@
 ;;; Code:
 
 (require 'json)
-(require 'oauth)
+(require 'oauth-yammer)
 (require 'image-file)
 
+;; request on yammer.com in order to use the API
 (defvar yammer-consumer-key nil)
 (defvar yammer-consumer-secret nil)
 
@@ -87,16 +88,19 @@
           (kill-this-buffer))))
   (unless yammer-access-token
     (let ((callback
+	   ;; YAMMER needs this callback for the 4 letter code
            (lambda ()
-             (let ((callback-token (read-string
+             (let ((oauth-verifier (read-string
                                     "Please enter the provided code: ")))
                (setq access-url
-                     (concat access-url "?callback_token=" callback-token))))))
+                     (concat access-url "?oauth_verifier=" oauth-verifier))))))
       (setq yammer-access-token
             (oauth-authorize-app yammer-consumer-key yammer-consumer-secret
                                  yammer-request-url yammer-access-url
                                  yammer-user-authorize
-                                 callback)))
+                                 callback))
+      ;; (pp yammer-access-token)
+      )
     (save-excursion
       (find-file (format "/home/%s/.yammer-token" username))
       (end-of-buffer)

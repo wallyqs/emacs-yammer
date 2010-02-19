@@ -1,0 +1,21 @@
+h1. README
+
+
+Fork from psanford/emacs-yammer in order to update changes
+to the yammer web service and stop using hmac-sha1 as it was not 
+working anymore.
+
+h2. To install
+
+git clone git://github.com/invertedplate/emacs-yammer.git
+;; Add emacs-yammer to your loadpath
+
+;; Set up the consumer-key and consumer-secret, introduce them 
+on yammer.el
+
+Finally on your .emacs:  
+(require 'yammer)
+(yammer-authenticate "linux username")
+
+
+This will create a file ~/.yammer-token that is used later for the requests.
